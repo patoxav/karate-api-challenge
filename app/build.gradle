@@ -20,4 +20,9 @@ java {
 test {
     useJUnitPlatform()
     outputs.upToDateWhen { false }
+
+    testLogging {
+        events "passed", "failed", "skipped"
+        showStandardStreams = true
+    }
 }
