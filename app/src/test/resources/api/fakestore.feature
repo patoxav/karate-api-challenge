@@ -1,7 +1,7 @@
 Feature: Fake Store API - Productos
 
   Background:
-    # baseUrl is defined once in karate-config.js and reused via 'url' + 'path'
+    
     Given url baseUrl
 
   @id-1 @caso-de-prueba @positivo
