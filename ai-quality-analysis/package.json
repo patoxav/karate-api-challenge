@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Post-run AI Failure Analyzer for the Karate API test suite. Classifies/explains failed scenarios (never decides pass/fail) and self-validates the AI output with a deterministic judge.",
+  "description": "Small, real AI integration for the Karate API test suite: sends one captured request/response to a real LLM for semantic risk review. Never decides pass/fail — that stays fully deterministic in Karate.",
   "scripts": {
-    "analyze": "node analyze.js",
-    "analyze:demo": "node analyze.js --demo"
+    "analyze": "node analyze-response.js fixtures/sample-response.json"
   },
   "engines": {
     "node": ">=18"

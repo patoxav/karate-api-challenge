@@ -1,7 +1,6 @@
 Feature: Fake Store API - Productos
 
   Background:
-    
     Given url baseUrl
 
   @id-1 @caso-de-prueba @positivo

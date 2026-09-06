@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "endpoint": "/products/1",
+  "response": {
+    "id": 1,
+    "price": 109.95,
+    "rating": {
+      "rate": 3.9,
+      "count": 120
+    }
+  }
+}

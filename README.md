@@ -19,38 +19,37 @@ Notas:
 - Repositorio usa Karate (karate-junit5). Las features se encuentran en src/test/resources/api/.
 - Agregar CI para publicar carpetas de build/karate-reports como artefactos para evidencias.
 
-## Capa opcional: AI Failure Analyzer
+## Capa opcional: análisis semántico con IA (LLM real)
 
-Módulo independiente en `ai-quality-analysis/` (Node.js, sin dependencias externas) que se ejecuta
-**después** de Karate, solo para dar triage/explicación a escenarios que ya fallaron. El LLM nunca
-decide si un test pasa o falla — eso lo sigue determinando exclusivamente Karate (status, schema,
-tipos, valores).
+Script pequeño e independiente en `ai-quality-analysis/` que **no forma parte del build de Gradle/Karate**.
+Toma un request/response ya capturado (por ejemplo, uno validado por Karate) y lo envía a un LLM real
+para una revisión semántica adicional. El LLM **nunca decide pass/fail** — eso lo sigue determinando
+exclusivamente Karate (status, schema, tipos, valores).
 
 ```
-Fake Store API
-      │
-      ▼
-   Karate ── assertions determinísticas (status / schema / tipos / valores)
-      │
-      ▼
-Karate Report (JSON)
-      │
-      ▼
-AI Failure Analyzer ── clasifica: API_BUG | CONTRACT_SCHEMA_ISSUE | DATA_ISSUE | INFRASTRUCTURE | TEST_DEFECT
-      │
-      ▼
-Judge (determinístico) ── valida schema, grounding en evidencia, severidad y accionabilidad de la respuesta del LLM
+Karate ejecuta
+   │  (assertions determinísticas: status / schema / tipos / valores)
+   ▼
+request/response capturado
+   │
+   ▼
+analyze-response.js (script pequeño)
+   │
+   ▼
+LLM real (OpenAI)
+   │
+   ▼
+JSON: classification (EXPECTED_BEHAVIOR | SUSPICIOUS | LIKELY_BUG) / risk (LOW | MEDIUM | HIGH) / observation
 ```
 
 Uso:
 
 ```
-cd app && ./gradlew test          # genera app/build/karate-reports/*.karate-json.txt
-cd ../ai-quality-analysis
-node analyze.js                    # analiza fallos reales del último run (heurística si no hay API key)
-node analyze.js --demo              # analiza un fixture de ejemplo para ver el flujo sin necesitar un fallo real
+cd ai-quality-analysis
+export OPENAI_API_KEY=sk-...
+node analyze-response.js fixtures/sample-response.json
 ```
 
-Con `OPENAI_API_KEY` definido (y opcionalmente `OPENAI_BASE_URL` / `OPENAI_MODEL`) usa un LLM real;
-sin la key, cae a un clasificador heurístico determinístico para que el pipeline siempre corra end-to-end.
-Salida: `ai-quality-analysis/output/ai-quality-report.{json,md}` (ignorado por git, se regenera en cada corrida).
+El script valida que la salida del LLM tenga el schema esperado y solo use valores permitidos
+(`classification`/`risk`), pero es intencionalmente pequeño y acotado — no reemplaza ninguna
+assertion, solo añade una capa experimental de análisis semántico sobre un caso ya evaluado.
