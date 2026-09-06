@@ -1,0 +1,14 @@
+{
+  "name": "ai-quality-analysis",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Post-run AI Failure Analyzer for the Karate API test suite. Classifies/explains failed scenarios (never decides pass/fail) and self-validates the AI output with a deterministic judge.",
+  "scripts": {
+    "analyze": "node analyze.js",
+    "analyze:demo": "node analyze.js --demo"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

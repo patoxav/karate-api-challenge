@@ -18,8 +18,8 @@ Ejecución y reportes:
 - Cada fallo incluye request/response in Karate reports (click a scenario)
 
 Hallazgos y consideraciones:
-- Fake Store API simula create/update peor la data es efìmera
-- Respuestas negativas pueden ser de tipo 404 y adicional fallos en arreglos u objetos vacios dependera del comportamiento de la API
+- Fake Store API simula create/update but data is ephemeral.
+- Negative responses may be 404 or empty arrays/objects depending on API behavior; tests assert flexibly to accept either.
 
 IA/Agents usadas: none
 
