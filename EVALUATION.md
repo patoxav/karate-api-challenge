@@ -2,13 +2,15 @@ EVALUATION — Fake Store API automated tests
 
 Resumen:
 - Stack: Karate (karate-junit5) + Gradle
-- Tests implemented: 6 scenarios (mix of positive & negative)
-  - GET /products/{id} (positive)
-  - GET /products/category/electronics (positive)
-  - POST /products (positive)
-  - GET /products/999999 (negative)
-  - GET /products/category/categoria-inexistente (negative)
-  - GET /products?limit=5 (negative/edge)
+- Tests implementados: 6 Scenario Outline (mix positivo/negativo), data-driven vía CSV
+  - CA1: GET /products/{id} (positivo) - data/get_product_by_id.csv
+  - CA2: GET /products/category/electronics (positivo) - data/get_products_by_category.csv
+  - CA3: POST /products (positivo) - data/create_product.csv
+  - CA4: GET /products/999999 (negativo) - data/product_not_found.csv
+  - CA5: GET /products/category/categoria-inexistente (negativo) - data/invalid_category.csv
+  - CA6: GET /products?limit=5 (negativo/edge) - data/limit.csv
+- Tags: @id-N (identifica el caso) y @caso-de-prueba en todos, @positivo/@negativo según tipo
+- Nomenclatura: cada Scenario Outline usa el identificador T-API-PQBP-1-CA{n}
 
 Ejecución y reportes:
 - Ejecutar: from repo root -> cd app && ./gradlew test
